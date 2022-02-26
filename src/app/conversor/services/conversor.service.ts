@@ -8,7 +8,8 @@ import {
 @Injectable()
 export class ConversorService {
 
-  private readonly BASE_URL = "http://data.fixer.io/api/latest?access_key=eba7130a5b2d720ce43eb5fcddd47cc3";
+  //private readonly BASE_URL = "http://data.fixer.io/api/latest?access_key=eba7130a5b2d720ce43eb5fcddd47cc3";
+  private readonly BASE_URL = "https://economia.awesomeapi.com.br/last";
   constructor(private http: HttpClient) {}
 
   /**
@@ -19,7 +20,8 @@ export class ConversorService {
    */
   converter(conversao: Conversao): Observable<any> {
 
-    let params = `&base=${conversao.moedaDe}&symbols=${conversao.moedaPara}`;
+    //let params = `&base=${conversao.moedaDe}&symbols=${conversao.moedaPara}`;
+    let params = `${conversao.moedaDe}-${conversao.moedaPara}`;
     return this.http
       .get(this.BASE_URL + params);
 
@@ -37,7 +39,7 @@ export class ConversorService {
     if (conversaoResponse === undefined) {
       return 0;
     }
-    return conversaoResponse.rates[conversao.moedaPara];
+    return conversaoResponse.bid;
   }
 
   /**
@@ -52,7 +54,7 @@ export class ConversorService {
     if (conversaoResponse === undefined) {
       return '0';
     }
-    return (1 / conversaoResponse.rates[conversao.moedaPara])
+    return (1 / conversaoResponse.bid)
       .toFixed(4);
   }
   /**
@@ -65,6 +67,6 @@ export class ConversorService {
     if (conversaoResponse === undefined) {
       return '';
     }
-    return conversaoResponse.date;
+    return conversaoResponse.create_date;
   }
 }
